@@ -1,4 +1,4 @@
-from flask import Flask , request, jsonify
+from flask import Flask , request, jsonify, render_template
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -6,8 +6,8 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route("/")
-def welcome():
-    return "welcome user lets check your attendance"
+def home():
+    return render_template("index.html")
 
 @app.route ("/attendance", methods =["POST"])
 def attendance():
@@ -20,7 +20,7 @@ def attendance():
     if attended is None or total is None:
         return jsonify({"error": "Please provide attended and total"}), 400
     if total == 0:
-        return jsonify({"Error!" : "total classed can't be zero"}) , 400
+        return jsonify({"error" : "total classes can't be zero"}) , 400
 
     current_percentage = (attended/total) * 100
 
@@ -46,4 +46,4 @@ def attendance():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
